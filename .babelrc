@@ -1,0 +1,7 @@
+// WE WILL ADD THE PRESETS WHICH BABEL WILL USE
+{
+    "presets": [
+        "@babel/preset-env", // it will compile ecmascript 6 and js standard
+        "@babel/preset-react" // it will compile jsx syntax
+    ]
+}
