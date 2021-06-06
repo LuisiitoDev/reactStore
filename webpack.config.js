@@ -2,6 +2,8 @@ const path = require('path');
 // with this we request the plugin previous installed
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
 module.exports = {
     entry: './src/index.js', //with this we say, what it is the main file and where it is
     output: { // with this we say, where it will be located our project and the compiled js result
@@ -28,6 +30,25 @@ module.exports = {
                         loader: 'html-loader'
                     }
                 ]
+            },
+            {
+                test: /\.css$/,
+                use:[
+                    {
+                        loader: MiniCssExtractPlugin.loader,
+                    },
+                    {
+                        loader: 'css-loader'
+                    }
+                ]
+            },
+            {
+                test: /\.scss$/,
+                loader:[
+                    MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    'sass-loader'
+                ]
             }
         ]
     },
@@ -37,6 +58,9 @@ module.exports = {
             template: './public/index.html',
             filename: './index.html'
         }),
+        new MiniCssExtractPlugin({
+            filename: 'assets/[name].css',
+        })
     ],
     // WE CONFIGURE OUR SERVER WHICH WILL RUN ON DEV ENVIROMENT
     devServer: {
