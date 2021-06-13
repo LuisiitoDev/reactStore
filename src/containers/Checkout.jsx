@@ -1,27 +1,48 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { FaTrashAlt } from "react-icons/fa";
+import AppContext from '../context/AppContext';
 
 const Checkout = () => {
+
+    const { state, removeFromCart } = useContext(AppContext);
+    const { cart } = state;
+
+    const handleRemove = product => {
+        removeFromCart(product);
+    };
+
+    const handleSumTotal = () => {
+        const reducer = (accumlator, currentValue) => accumlator + currentValue.price;
+        const sum = cart.reduce(reducer, 0);
+        return sum;
+    };
+
     return (
         <div className="Checkout">
             <div className="Checkout-content">
-                <h3>Lista de Pedidos: </h3>
-                <div className="Checkout-item">
-                    <div className="Checkout-element">
-                        <h4>Item Name: </h4>
-                        <span>$10</span>
+                {cart.length > 0 ? <h3>Product List: </h3> : <h3>no products</h3>}
+                {cart.map(item => (
+                    <div className="Checkout-item">
+                        <div className="Checkout-element">
+                            <h4>{item.title}</h4>
+                            <span>${item.price}</span>
+                        </div>
+                        <FaTrashAlt onClick={() => handleRemove(item)} />
                     </div>
-                    <FaTrashAlt />
-                </div>
-            </div>
-            <div className="Checkout-sidebar">
-                <h3>Total Price: $10</h3>
-                <Link to="checkout/information">
-                    <button type="button">Cotinue order</button>
-                </Link>
+                ))}
 
             </div>
+            {cart.length > 0 && (
+                <div className="Checkout-sidebar">
+                    <h3>{`Total $ ${handleSumTotal()}`}</h3>
+                    <Link to="checkout/information">
+                        <button type="button">Cotinue order</button>
+                    </Link>
+
+                </div>
+            )}
+
         </div>
     )
 }
